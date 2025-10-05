@@ -8,6 +8,10 @@ const commands = [
     name: "ping",
     description: "Ping the bot",
   },
+  {
+    name: "stats",
+    description: "View server stats",
+  },
 ];
 
 async function registerCommand() {
