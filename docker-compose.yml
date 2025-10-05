@@ -1,0 +1,16 @@
+version: "3.9"
+
+services:
+  discord-bot:
+    build: .
+    container_name: discord-bot
+    # Load environment variables from your .env file
+    env_file: .env
+    # Always restart unless manually stopped
+    restart: unless-stopped
+    # Optional: add labels or logs limit
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
