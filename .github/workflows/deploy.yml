@@ -22,10 +22,8 @@ jobs:
           port: ${{ secrets.SERVER_PORT }}
           script: |
             cd ${{ secrets.PROJECT_PATH }}
-            # Ensure local repo matches remote exactly
             git fetch origin
             git reset --hard origin/main
             git clean -fd
-            # Rebuild and restart Docker Compose services
-            docker-compose down
-            docker-compose up -d --build
+            docker compose down
+            docker compose up -d --build
