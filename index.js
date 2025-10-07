@@ -12,7 +12,6 @@ const client = new Client({
   ],
 });
 
-// Function to generate image using Gemini API
 async function generateImage(prompt) {
   try {
     const requestData = {

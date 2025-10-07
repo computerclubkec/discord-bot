@@ -18,7 +18,7 @@ const commands = [
     options: [
       {
         name: "description",
-        type: 3, // STRING type
+        type: 3,
         description: "Description of the image to generate",
         required: true,
       },
