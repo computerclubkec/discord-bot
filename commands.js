@@ -12,6 +12,18 @@ const commands = [
     name: "stats",
     description: "View server stats",
   },
+  {
+    name: "image",
+    description: "Generate an image using AI",
+    options: [
+      {
+        name: "description",
+        type: 3, // STRING type
+        description: "Description of the image to generate",
+        required: true,
+      },
+    ],
+  }
 ];
 
 async function registerCommand() {
