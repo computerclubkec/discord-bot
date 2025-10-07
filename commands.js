@@ -23,7 +23,15 @@ const commands = [
         required: true,
       },
     ],
-  }
+  },
+  {
+    name: "pastevents",
+    description: "View past events of KEC Computer Club",
+  },
+  {
+    name: "recentevents",
+    description: "View recent or upcoming events of KEC Computer Club",
+  },
 ];
 
 async function registerCommand() {
