@@ -1,5 +1,9 @@
 const { Client, IntentsBitField, AttachmentBuilder } = require("discord.js");
 const axios = require("axios");
+
+const fetch = require("node-fetch");
+const cheerio = require("cheerio");
+
 require("dotenv").config();
 
 const client = new Client({
@@ -20,14 +24,14 @@ async function generateImage(prompt) {
           role: "user",
           parts: [
             {
-              text: prompt
-            }
-          ]
-        }
+              text: prompt,
+            },
+          ],
+        },
       ],
       generationConfig: {
-        responseModalities: ["IMAGE"]
-      }
+        responseModalities: ["IMAGE"],
+      },
     };
 
     const response = await axios.post(
@@ -35,36 +39,91 @@ async function generateImage(prompt) {
       requestData,
       {
         headers: {
-          'Content-Type': 'application/json'
-        }
+          "Content-Type": "application/json",
+        },
       }
     );
 
     // Extract image data from response
     const candidates = response.data.candidates;
-    if (candidates && candidates[0] && candidates[0].content && candidates[0].content.parts) {
+    if (
+      candidates &&
+      candidates[0] &&
+      candidates[0].content &&
+      candidates[0].content.parts
+    ) {
       for (const part of candidates[0].content.parts) {
         if (part.inlineData && part.inlineData.data) {
           return part.inlineData.data;
         }
       }
     }
-    
-    throw new Error('No image data found in response');
+
+    throw new Error("No image data found in response");
   } catch (error) {
-    console.error('Error generating image:', error.response?.data || error.message);
-    
+    console.error(
+      "Error generating image:",
+      error.response?.data || error.message
+    );
+
     // Handle specific error types
     if (error.response?.status === 429) {
-      throw new Error('QUOTA_EXCEEDED');
+      throw new Error("QUOTA_EXCEEDED");
     } else if (error.response?.status === 401) {
-      throw new Error('INVALID_API_KEY');
+      throw new Error("INVALID_API_KEY");
     } else if (error.response?.status === 403) {
-      throw new Error('PERMISSION_DENIED');
+      throw new Error("PERMISSION_DENIED");
     } else {
-      throw new Error('API_ERROR');
+      throw new Error("API_ERROR");
     }
   }
+}
+
+// function to fetch past events from the KEC Computer Club website
+async function fetchPastEvents() {
+  const url = "https://computerclubkec.github.io/events/past-events";
+  const res = await fetch(url);
+  const html = await res.text();
+  const $ = cheerio.load(html);
+
+  const events = [];
+
+  $(".event-card").each((_, el) => {
+    const title = $(el).find("h3").text().trim();
+    const date = $(el).find(".fa-calendar-days").parent().text().trim();
+    const description = $(el).find(".event-description-short").text().trim();
+    const link =
+      "https://computerclubkec.github.io" + $(el).find("a").attr("href");
+    const image =
+      "https://computerclubkec.github.io" + $(el).find("img").attr("src");
+
+    events.push({ title, date, description, link, image });
+  });
+
+  return events;
+}
+
+// function to fetch recent or upcoming events from the KEC Computer Club website
+async function fetchUpcomingEvents() {
+  const url = "https://computerclubkec.github.io/events/upcoming";
+  const res = await fetch(url);
+  const html = await res.text();
+  const $ = cheerio.load(html);
+
+  const events = [];
+
+  $(".event-card").each((_, el) => {
+    const title = $(el).find("h3").text().trim();
+    const date = $(el).find(".fa-calendar-days").parent().text().trim();
+    const description = $(el).find(".event-description-short").text().trim();
+    const link =
+      "https://computerclubkec.github.io" + $(el).find("a").attr("href");
+    const image =
+      "https://computerclubkec.github.io" + $(el).find("img").attr("src");
+    events.push({ title, date, description, link, image });
+  });
+
+  return events;
 }
 
 client.once("clientReady", (readyClient) => {
@@ -107,38 +166,106 @@ client.on("interactionCreate", async (interaction) => {
 
   if (interaction.commandName === "image") {
     const description = interaction.options.getString("description");
-    
+
     await interaction.deferReply();
-    
+
     try {
       const imageBase64 = await generateImage(description);
-      
+
       // Convert base64 to buffer
-      const imageBuffer = Buffer.from(imageBase64, 'base64');
-      
+      const imageBuffer = Buffer.from(imageBase64, "base64");
+
       // Create attachment
-      const attachment = new AttachmentBuilder(imageBuffer, { name: 'generated_image.png' });
-      
+      const attachment = new AttachmentBuilder(imageBuffer, {
+        name: "generated_image.png",
+      });
+
       await interaction.editReply({
         content: `🎨 Generated image for: "${description}"`,
-        files: [attachment]
+        files: [attachment],
       });
     } catch (error) {
-      console.error('Error in image command:', error);
-      
-      let errorMessage = '❌ Sorry, there was an error generating the image.';
-      
-      if (error.message === 'QUOTA_EXCEEDED') {
-        errorMessage = '⚠️ API quota exceeded. Please try again later or check your billing settings.';
-      } else if (error.message === 'INVALID_API_KEY') {
-        errorMessage = '🔑 Invalid API key. Please check your configuration.';
-      } else if (error.message === 'PERMISSION_DENIED') {
-        errorMessage = '🚫 Permission denied. Your API key may not have image generation access.';
+      console.error("Error in image command:", error);
+
+      let errorMessage = "❌ Sorry, there was an error generating the image.";
+
+      if (error.message === "QUOTA_EXCEEDED") {
+        errorMessage =
+          "⚠️ API quota exceeded. Please try again later or check your billing settings.";
+      } else if (error.message === "INVALID_API_KEY") {
+        errorMessage = "🔑 Invalid API key. Please check your configuration.";
+      } else if (error.message === "PERMISSION_DENIED") {
+        errorMessage =
+          "🚫 Permission denied. Your API key may not have image generation access.";
       }
-      
+
       await interaction.editReply({
         content: errorMessage,
-        ephemeral: true
+        ephemeral: true,
+      });
+    }
+  }
+
+  // command to fetch and display past events
+  if (interaction.commandName === "pastevents") {
+    await interaction.deferReply();
+
+    try {
+      const events = await fetchPastEvents();
+      const pastRecentEvents = events.slice(0, 5);
+
+      const introEmbed = {
+        title: "📅 Past Events",
+        description: `Here are the **${pastRecentEvents.length} most recent past events** organized by KEC Computer Club.`,
+        color: 0x5865f2,
+      };
+
+      const eventEmbeds = pastRecentEvents.map((event) => ({
+        title: event.title,
+        description: `${event.description}\n\n[Read More](${event.link})`,
+        color: 0x3498db,
+        footer: { text: event.date },
+        thumbnail: { url: event.image },
+      }));
+
+      await interaction.editReply({ embeds: [introEmbed, ...eventEmbeds] });
+    } catch (err) {
+      console.error(err);
+      await interaction.editReply({
+        content: "⚠️ Failed to fetch past events. Please try again later.",
+        ephemeral: true,
+      });
+    }
+  }
+
+  // command to fetch and display recent or upcoming events
+  if (interaction.commandName === "recentevents") {
+    await interaction.deferReply();
+
+    try {
+      const events = await fetchUpcomingEvents();
+      const recentEvents = events.slice(0, 5);
+
+      const introEmbed = {
+        title: "📅 Recent Events",
+        description: `Here are the **${recentEvents.length} most recent and upcoming events** organized by KEC Computer Club.`,
+        color: 0x5865f2,
+      };
+
+      const eventEmbeds = recentEvents.map((event) => ({
+        title: event.title,
+        description: `${event.description}\n\n[Read More](${event.link})`,
+        color: 0x3498db,
+        footer: { text: event.date },
+        thumbnail: { url: event.image },
+      }));
+
+      await interaction.editReply({ embeds: [introEmbed, ...eventEmbeds] });
+    } catch (error) {
+      console.error(err);
+      await interaction.editReply({
+        content: "⚠️ Failed to fetch recent events. Please try again later.",
+        ephemeral: true,
       });
     }
   }
