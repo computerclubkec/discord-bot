@@ -10,11 +10,11 @@ Discord bot for the KEC Computer Club Discord server. This repository contains t
 - Local Development
 - Environment Variables
 - Commands Reference
-- Code of Conduct
-- Contributing
 - Docker
 - Troubleshooting
 - Files of Interest
+- Contributing
+- Community
 - License & Contact
 
 ## About
@@ -80,61 +80,6 @@ GEMINI_API_KEY=your_gemini_api_key
 - `/pastevents` — Shows past events from the club website
 - `/recentevents` — Shows recent/upcoming events
 
-## Code of Conduct
-
-As members of the KEC Computer Club community, we are dedicated to creating a welcoming, inclusive, and respectful environment for everyone, regardless of background, experience, or identity. This Code of Conduct applies to all interactions in our repository, Discord server, events, and other spaces where our community gathers.
-
-### Our Standards
-
-We strive to:
-
-- **Be welcoming and respectful.** Treat others with kindness and empathy. Appreciate diverse perspectives and experiences.
-- **Engage in constructive discussions.** Provide helpful feedback and encourage learning by supporting each other.
-- **Stay focused and collaborative.** Work towards the goals of the KEC Computer Club. Respect others' time by being constructive and on-topic.
-- **Respect personal boundaries.** Avoid inappropriate language or behavior and respect others' comfort levels in all interactions.
-
-### Unacceptable Behavior
-
-Examples of unacceptable behavior include:
-
-- Harassment, discrimination, or derogatory comments based on race, gender, sexual orientation, disability, or any other personal characteristic.
-- Insults, threats, or personal attacks.
-- Excessive promotion of unrelated content, spamming, or off-topic discussions.
-- Disruptive behavior, trolling, or intentional intimidation.
-
-### Reporting and Enforcement
-
-If you experience or witness any behavior that violates this Code of Conduct, please report it to our team:
-
-- **Email:** [computerclub@kec.edu.np](mailto:computerclub@kec.edu.np)
-- **Discord Moderator Contact:** Message any moderator or admin on the [Discord server](https://discord.gg/neMkXj7GC3).
-
-All reports will be handled confidentially, and appropriate action will be taken to maintain a safe and welcoming community.
-
-### Consequences
-
-Violations of the Code of Conduct may result in:
-
-- A warning for minor issues.
-- Temporary or permanent suspension from participation in the repository, Discord server, or KEC Computer Club events.
-- Permanent ban from the community for severe or repeated offenses.
-
-By participating in the KEC Computer Club, you agree to uphold this Code of Conduct. Let's create a positive and productive community for everyone.
-
----
-
-_This Code of Conduct is adapted and inspired by community standards outlined in the [Contributor Covenant](https://www.contributor-covenant.org/)._
-
-## Contributing
-
-We welcome contributions! Please follow these steps:
-
-1. Fork the repository and create a branch: `git checkout -b feature/my-change`
-2. Make changes, add tests if relevant, and run linters
-3. Open a Pull Request describing your change
-
-For larger changes, open an issue first to discuss the approach.
-
 ## Docker
 
 - Image is based on `node:20-alpine` and runs `node commands.js` during build to register slash commands. Consider separating registration from build for production.
@@ -152,8 +97,46 @@ For larger changes, open an issue first to discuss the approach.
 - `Dockerfile`, `docker-compose.yml` — containerization
 - `.env.example` — environment variable template
 
-## License & Contact
+## Contributing
 
-This project is licensed under the MIT License — see `LICENSE`.
+We welcome contributions from everyone! Please follow these steps:
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+For detailed guidelines, please read our [CONTRIBUTING.md](CONTRIBUTING.md) file.
+
+## Community
+
+### Development Sessions
+
+We host regular development sessions to:
+
+- Review pull requests
+- Discuss new features
+- Debug issues
+- Share knowledge
+- Plan future improvements
+
+Join our [Discord Server](https://discord.gg/neMkXj7GC3) to participate in these sessions!
+
+### Contributors
+
+Thanks to our dedicated contributors who continue to build and improve the KEC Computer Club's online presence:
+
+<a href="https://github.com/computerclubkec/computerclubkec.github.io/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=computerclubkec/computerclubkec.github.io&max=400&columns=20" />
+</a>
+
+### Code of Conduct
+
+Please read our [Code of Conduct](CODE_OF_CONDUCT.md) to understand our community standards and expectations.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 Contact: computerclub@kec.edu.np
