@@ -56,6 +56,15 @@ Use a clear name like `fix/scraper-selector`, `feat/gemini-image`, or `docs/read
 
 ## 5. Running the bot locally
 
+1. Copy `.env.example` to `.env` and fill in values.
+2. Start with Docker Compose:
+
+```bash
+docker-compose up --build -d
+```
+
+**OR**
+
 1. Install dependencies:
 
 ```bash
