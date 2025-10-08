@@ -1,3 +1,11 @@
+# =============================================================================
+# Dockerfile for Discord Bot
+# =============================================================================
+# This Dockerfile sets up a containerized environment for a Discord bot.
+# It uses the official Node.js LTS image, installs dependencies,
+# and copies the bot's source code into the container.
+# =============================================================================
+
 # Use the official Node.js LTS image
 FROM node:20-alpine
 

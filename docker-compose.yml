@@ -1,3 +1,9 @@
+# =============================================================================
+# Docker Compose Configuration for Discord Bot
+# =============================================================================
+# This configuration sets up a Docker container for the Discord bot.
+# It uses environment variables defined in the .env file for configuration.
+# The container will automatically restart unless manually stopped.
 services:
   discord-bot:
     build: .
