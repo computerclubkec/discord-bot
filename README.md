@@ -127,8 +127,8 @@ Join our [Discord Server](https://discord.gg/neMkXj7GC3) to participate in these
 
 Thanks to our dedicated contributors who continue to build and improve the KEC Computer Club's online presence:
 
-<a href="https://github.com/computerclubkec/computerclubkec.github.io/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=computerclubkec/computerclubkec.github.io&max=400&columns=20" />
+<a href="https://github.com/computerclubkec/discord-bot/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=computerclubkec/discord-bot&max=400&columns=20" />
 </a>
 
 ### Code of Conduct
