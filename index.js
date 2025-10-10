@@ -1,3 +1,19 @@
+// =============================================================================
+// Index.js - Main bot logic
+// =============================================================================
+// This script contains the main logic for a Discord bot using the Discord.js library.
+// It handles various slash commands including ping, stats, image generation using Gemini API,
+// and fetching past and recent events from the KEC Computer Club website.
+// Ensure you have the necessary environment variables set in your .env file.
+// ----------------------------------------------------------------------------
+// Commands implemented:
+// /ping - Check if the bot is active
+// /stats - View server statistics
+// /image - Generate an image using AI (requires GEMINI_API_KEY)
+// /pastevents - View past events of KEC Computer Club
+// /recentevents - View recent or upcoming events of KEC Computer Club
+// =============================================================================
+
 const { Client, IntentsBitField, AttachmentBuilder } = require("discord.js");
 const axios = require("axios");
 

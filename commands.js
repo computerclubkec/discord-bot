@@ -1,3 +1,13 @@
+// =============================================================================
+// Registering Slash Commands for Discord Bot
+// =============================================================================
+// This script registers slash commands for a Discord bot using the Discord.js library.
+// Ensure you have the necessary environment variables set in your .env file.
+// Define the commands to be registered
+// Format
+// { name: "command_name", description: "Command description", options: [...] }
+//
+// =============================================================================
 const { REST, Routes } = require("discord.js");
 require("dotenv").config();
 
