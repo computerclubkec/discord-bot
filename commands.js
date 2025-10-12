@@ -1,57 +1,30 @@
-// =============================================================================
-// Registering Slash Commands for Discord Bot
-// =============================================================================
-// This script registers slash commands for a Discord bot using the Discord.js library.
-// Ensure you have the necessary environment variables set in your .env file.
-// Define the commands to be registered
-// Format
-// { name: "command_name", description: "Command description", options: [...] }
-//
-// =============================================================================
 const { REST, Routes } = require("discord.js");
+const fs = require("fs");
+const path = require("path");
 require("dotenv").config();
 
-const rest = new REST({ version: 10 }).setToken(process.env.TOKEN);
+const commands = [];
+const folders = path.join(__dirname, "commands");
 
-const commands = [
-  {
-    name: "ping",
-    description: "Ping the bot",
-  },
-  {
-    name: "stats",
-    description: "View server stats",
-  },
-  {
-    name: "image",
-    description: "Generate an image using AI",
-    options: [
-      {
-        name: "description",
-        type: 3,
-        description: "Description of the image to generate",
-        required: true,
-      },
-    ],
-  },
-  {
-    name: "pastevents",
-    description: "View past events of KEC Computer Club",
-  },
-  {
-    name: "recentevents",
-    description: "View recent or upcoming events of KEC Computer Club",
-  },
-];
-
-async function registerCommand() {
-  await rest.put(
-    Routes.applicationGuildCommands(
-      process.env.CLIENT_ID,
-      process.env.GUILD_ID
-    ),
-    { body: commands }
-  );
+for (const folder of fs.readdirSync(folders)) {
+  const files = fs.readdirSync(path.join(folders, folder)).filter(f => f.endsWith(".js"));
+  for (const file of files) {
+    const command = require(path.join(folders, folder, file));
+    if ("data" in command && "execute" in command) commands.push(command.data.toJSON());
+  }
 }
 
-registerCommand();
+const rest = new REST({ version: "10" }).setToken(process.env.TOKEN);
+
+(async () => {
+  try {
+    console.log("⏳ Registering guild commands...");
+    await rest.put(
+      Routes.applicationGuildCommands(process.env.CLIENT_ID, process.env.GUILD_ID),
+      { body: commands }
+    );
+    console.log("✅ Commands registered successfully!");
+  } catch (error) {
+    console.error(error);
+  }
+})();
