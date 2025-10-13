@@ -21,8 +21,5 @@ RUN npm install --omit=dev
 # Copy the rest of your code
 COPY . .
 
-# Run command registration script first
-RUN node commands.js
-
-# Default command to run your bot
-CMD ["node", "index.js"]
+# Run registration at runtime
+CMD ["sh", "-c", "node commands.js && node index.js"]
